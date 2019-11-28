@@ -65,25 +65,19 @@ public final class IpProcessor extends AbstractProcessor {
             document.setFieldValue(versionField, inetAddress instanceof Inet4Address ? 4 : 6);
         }
 
-        if (inetAddress instanceof Inet4Address) {
-            if (ipv4ClassField != null) {
-                byte highByte = inetAddress.getAddress()[0];
-                if ((highByte & (1 << 7)) == 0) {
-                    document.setFieldValue(ipv4ClassField, "A");
-                } else if ((highByte & (1 << 6)) == 0) {
-                    document.setFieldValue(ipv4ClassField, "B");
-                } else if ((highByte & (1 << 5)) == 0) {
-                    document.setFieldValue(ipv4ClassField, "C");
-                } else if ((highByte & (1 << 4)) == 0) {
-                    document.setFieldValue(ipv4ClassField, "D");
-                } else {
-                    document.setFieldValue(ipv4ClassField, "E");
-                }
+        if (inetAddress instanceof Inet4Address && ipv4ClassField != null) {
+            int highByte = inetAddress.getAddress()[0] + 128;
+            if (highByte < 128) {
+                document.setFieldValue(ipv4ClassField, "A");
+            } else if (highByte < 192) {
+                document.setFieldValue(ipv4ClassField, "B");
+            } else if (highByte < 224) {
+                document.setFieldValue(ipv4ClassField, "C");
+            } else if (highByte < 240) {
+                document.setFieldValue(ipv4ClassField, "D");
+            } else {
+                document.setFieldValue(ipv4ClassField, "E");
             }
-        }
-
-        if(typeField!=null){
-            if(inetAddress.isMulticastAddress())
         }
 
         return document;
