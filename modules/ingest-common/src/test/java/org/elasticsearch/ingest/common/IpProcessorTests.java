@@ -11,5 +11,6 @@ public class IpProcessorTests extends ESTestCase {
         ingestDocument.setFieldValue("field", "192.168.1.1");
         IpProcessor ipProcessor = new IpProcessor("", "field", false, false, "target_field", null, "ipv4_class", null, null);
         ipProcessor.execute(ingestDocument);
+
     }
 }
