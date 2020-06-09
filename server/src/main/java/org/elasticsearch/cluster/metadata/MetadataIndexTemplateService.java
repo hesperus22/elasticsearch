@@ -198,9 +198,8 @@ public class MetadataIndexTemplateService {
         // Collect all the composable (index) templates that use this component template, we'll use
         // this for validating that they're still going to be valid after this component template
         // has been updated
-        final Map<String, ComposableIndexTemplate> templatesUsingComponent = currentState.metadata().templatesV2().entrySet().stream()
-            .filter(e -> e.getValue().composedOf().contains(name))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        final Map<String, ComposableIndexTemplate> templatesUsingComponent = new HashMap<>(currentState.metadata().templatesV2());
+        templatesUsingComponent.values().removeIf(v -> v.composedOf().contains(name) == false);
 
         // if we're updating a component template, let's check if it's part of any V2 template that will yield the CT update invalid
         if (create == false && finalSettings != null) {
