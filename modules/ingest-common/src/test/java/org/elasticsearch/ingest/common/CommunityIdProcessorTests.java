@@ -38,17 +38,9 @@ public class CommunityIdProcessorTests extends ESTestCase {
     // https://github.com/elastic/beats/blob/master/libbeat/processors/communityid/communityid_test.go
 
     private Map<String, Object> event;
-    private ThreadLocal<MessageDigest> messageDigest;
 
     @Before
     public void setup() throws Exception {
-        messageDigest = ThreadLocal.withInitial(() -> {
-            try {
-                return MessageDigest.getInstance("SHA-1");
-            } catch (NoSuchAlgorithmException e) {
-                throw new IllegalStateException("unable to obtain SHA-1 hasher", e);
-            }
-        });
         event = buildEvent();
     }
 
@@ -346,7 +338,6 @@ public class CommunityIdProcessorTests extends ESTestCase {
             DEFAULT_ICMP_TYPE,
             DEFAULT_ICMP_CODE,
             DEFAULT_TARGET,
-            messageDigest,
             CommunityIdProcessor.toUint16(seed),
             ignoreMissing
         );
