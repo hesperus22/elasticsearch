@@ -167,15 +167,9 @@ public final class CommunityIdProcessor extends AbstractProcessor {
 
         if (flow == null) {
             throw new IllegalArgumentException("unable to construct flow from document");
-        } else if (MESSAGE_DIGEST != null) {
-            byte[] seedBytes = toUint16(seed);
-            synchronized (MESSAGE_DIGEST) {
-                MessageDigest md = MESSAGE_DIGEST.get();
-                md.reset();
-                return flow.toCommunityId(seedBytes);
-            }
         } else {
-            throw new IllegalStateException("unable to obtain SHA-1 hasher");
+            byte[] seedBytes = toUint16(seed);
+            return flow.toCommunityId(seedBytes);
         }
     }
 
